@@ -1,24 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState,useEffect} from 'react';
 import './App.css';
+import alanBtn from '@alan-ai/alan-sdk-web';
+import ImageCards from './components/ImageCards/ImageCards';
 
+
+const alanKey = '0eb66423884de847227c7ff60e4bc1b52e956eca572e1d8b807a3e2338fdd0dc/stage';
 function App() {
+
+  const [searchResult,setSearchReults] = useState([])
+
+  useEffect(() => {
+    alanBtn({
+      key: alanKey,
+      onCommand: ({command , result}) => {
+        if(command === "testCommand"){
+          alert("Test command executed!!!")
+        }
+        if(command == "SearchResults"){
+          setSearchReults(result.hits);
+        }
+      }
+    })
+  },[])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    
+    <div >
+      <h1>Voice Image Search</h1>
+      <ImageCards results={searchResult}/>
     </div>
   );
 }
